@@ -16,10 +16,5 @@ Project context Copilot should apply to every session in this repository.
 
 ## Persistence and hydration rules
 
-<!-- TODO (Step 2): add the two project rules this app depends on.
-     Replace this TODO with concrete guidance covering:
-       1. how bookmarks are persisted in the browser, and
-       2. where that browser-only code is allowed to run so the
-          static build never touches browser APIs. -->
-
-_TODO: complete the persistence and hydration rules above._
+1. **Persistence uses browser `localStorage`.** Bookmarks (each an original URL and its short `mona-` slug) are saved under the `mona-bookmarks` key in `localStorage`. There is no server or database. Treat stored data as untrusted: validate it on load and recover from empty or corrupted values without throwing.
+2. **Browser code runs behind a `client:load` boundary.** Any code that touches `localStorage`, `window` or `document` must live in a client-side boundary: an inline `<script>` in the component or a framework component hydrated with `client:load`. Never access browser APIs in Astro component frontmatter, which runs during SSR and the static build.
